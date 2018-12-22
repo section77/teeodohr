@@ -1,5 +1,23 @@
 $fn=50;
 
+module ellipse(diameter) {
+    //resize([diameter*1.5,diameter/1.5]) circle(d=diameter);
+    scale([1.5,.5])circle(d=diameter);
+}
+
+module gruen() {
+    linear_extrude(height=4) {
+        translate([0,8,0]) rotate([0,0,90]) ellipse(8);
+        translate([-4,8,0]) rotate([0,0,-45]) ellipse(6);
+        translate([-4,4,0]) rotate([0,0,0]) ellipse(4);
+    }
+    translate([0,4,2]) rotate([0,90,-45]) difference() {
+        translate([0,0,0]) cylinder(r=4,h=4);
+        translate([6,0,2]) cube([8,8,4], center=true);
+        translate([-6,0,2]) cube([8,8,4],center=true);
+    }
+}
+
 module moehre() {
     difference() {
         union() {
@@ -48,5 +66,16 @@ module ohr() {
     }
 }
 
+module base() {
+    difference() {
+        translate([0,0,0]) cylinder(r=4,h=4);
+        translate([6,0,2]) cube([8,8,4], center=true);
+        translate([-6,0,2]) cube([8,8,4],center=true);
+    }
+}
+
+!gruen();
 moehre();
-!ohr();
+ohr();
+base();
+
