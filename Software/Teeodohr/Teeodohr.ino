@@ -8,8 +8,8 @@
 Servo Arm;              // Servo 1 zuweisen
 
 // maximaler Ohr Winkel. Je nach Tassen Höhe anpassen 
-int max_Winkel=80;      
-int min_Winkel=10;
+int max_Winkel=70;      
+int min_Winkel=20;
 
 // notes in the melody:
 int melody_1[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4};
@@ -36,6 +36,8 @@ void setup() {
       
   Arm.attach(11);         // attaches the servo Arm to pin D11 servo object
   Arm.write(min_Winkel);          // tell servo 1 to go to position 10°
+  delay(1500);
+  Arm.detach();    
 
   ON_OFF_Sound();         // Play Sound. Ready to make Tea
 }
@@ -94,21 +96,25 @@ void TeaTime () {
   for (int i = 1; i <= Time; i++){
     
     // Tee Beutel langsam abwärts bis zum eingestellten Winkel
+    Arm.attach(11);
     for (int p = min_Winkel; p <=max_Winkel; p++){
       Arm.write(p);
       delay(20);
     }   
+    Arm.detach();    
 
     // Diese Schleife dauert 1minute.
     for (int x=0;x<=20;x++){
       
       // Kurz vor ende der Minute den Beutel anheben.
       if (x==19){
+        Arm.attach(11);
         for (int p = max_Winkel; p >=min_Winkel; p--){
           Arm.write(p);          // tell servo 1 to go to position xx degree out of Tea slowly !!
           delay(20);
         }
-      }
+        Arm.detach();    
+     }
       
       // LED's fade in /out in increments of 5 points:
       for (int fadeValue = 15 ; fadeValue <= 250; fadeValue += 5) {
@@ -136,10 +142,12 @@ void TeaTime () {
   }
 
   // Arm nach oben
+  Arm.attach(11);
   for (int p = max_Winkel; p >=min_Winkel; p--){
     Arm.write(p);
     delay(20);
   }
+  Arm.detach();    
 
   // Warten bis Taster losgelassen
   do { delay(20); }while (analogRead(A2)>500);
