@@ -141,9 +141,6 @@ void TeaTime () {
     }
   }
 
-  // Arm nach oben
-  Arm_anheben();
-
   // Warten bis Taster losgelassen
   do { delay(20); }while (analogRead(A2)>500);
 
