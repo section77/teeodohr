@@ -12,15 +12,22 @@ int max_Winkel=70;
 int min_Winkel=20;
 
 // notes in the melody:
-//int melody_1[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4};
+int melody_1[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4};
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
-//int noteDurations_1[] = {4, 8, 8, 4, 4, 4, 4, 4};
+int noteDurations_1[] = {4, 8, 8, 4, 4, 4, 4, 4};
 
 //alternative melody
 // notes in the melody:
-int melody_1[] = {NOTE_C3, NOTE_F3, NOTE_F3, NOTE_A3, NOTE_A3, NOTE_C4, NOTE_C4, NOTE_A3};
+int melody_2[] = {NOTE_C3, NOTE_F3, NOTE_F3, NOTE_A3, NOTE_A3, NOTE_C4, NOTE_C4, NOTE_A3};
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
-int noteDurations_1[] = {8, 4, 8, 4, 8, 4, 8, 4};
+int noteDurations_2[] = {8, 4, 8, 4, 8, 4, 8, 4};
+
+//alternative melody
+// notes in the melody:
+int melody_3[] = {NOTE_B2, NOTE_E3, NOTE_GS3, NOTE_B2, NOTE_E3, NOTE_GS3, NOTE_E3, NOTE_FS3, 0, NOTE_FS3, 0, NOTE_FS3, 0, NOTE_FS3};
+// note durations: 4 = quarter note, 8 = eighth note, etc.:
+int noteDurations_3[] = {8, 4, 8, 8, 4, 8, 8, 4, 32, 5, 32, 16, 32, 4};
+
 
 
 int LED1=3;                 // LED 3 minuten
@@ -45,9 +52,11 @@ void setup() {
   Arm.write(min_Winkel);          // tell servo 1 to go to position 10°
   delay(1500);
   Arm.detach();
-
+//  Serial.begin(115200);
+  randomSeed(analogRead(3));
   ON_OFF_Sound();         // Play Sound. Ready to make Tea
 }
+
 
 void loop() {
 
@@ -143,7 +152,6 @@ void TeaTime () {
 
   // Warten bis Taster losgelassen
   do { delay(20); }while (analogRead(A2)>500);
-
   ON_OFF_Sound();         // Play sound ready to make Tea
   // Zeit wieder auf 3 min.
   Time=3;
@@ -173,11 +181,34 @@ void Arm_absenken(){
 }
 
 void ON_OFF_Sound(){
-    for (int thisNote = 0; thisNote < 8; thisNote++) {
-    int noteDuration_1 = 1000 / noteDurations_1[thisNote];
-    tone(speakerOut, melody_1[thisNote], noteDuration_1);
-    int pauseBetweenNotes = noteDuration_1 * 1.30;
-    delay(pauseBetweenNotes);
-    noTone(speakerOut);
-  }
+    int MelodieNummer = random(1, 4);
+//    Serial.println(MelodieNummer);
+    switch (MelodieNummer) {
+      case 1: 
+        for (int thisNote = 0; thisNote < 8; thisNote++) {
+          int noteDuration_1 = 1000 / noteDurations_1[thisNote];
+          tone(speakerOut, melody_1[thisNote], noteDuration_1);
+          int pauseBetweenNotes = noteDuration_1 * 1.30;
+          delay(pauseBetweenNotes);
+          noTone(speakerOut);
+        }
+        break;
+      case 2: 
+        for (int thisNote = 0; thisNote < 8; thisNote++) {
+          int noteDuration_2 = 1000 / noteDurations_2[thisNote];
+          tone(speakerOut, melody_2[thisNote], noteDuration_2);
+          int pauseBetweenNotes = noteDuration_2 * 1.30;
+          delay(pauseBetweenNotes);
+          noTone(speakerOut);
+        }
+        break;
+      case 3: 
+        for (int thisNote = 0; thisNote < 14; thisNote++) {
+          int noteDuration_3 = 1000 / noteDurations_3[thisNote];
+          tone(speakerOut, melody_3[thisNote], noteDuration_3);
+          int pauseBetweenNotes = noteDuration_3 * 1.30;
+          delay(pauseBetweenNotes);
+          noTone(speakerOut);
+        }
+    }
 }
